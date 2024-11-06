@@ -1,11 +1,13 @@
-'use client';
+"use client";
 import { useEffect, useState } from "react";
 import { fetchCars, addCar, updateCar, deleteCar } from '@/services/carServices';
-import styles from './styles/mainPage.module.css'
+import CarList from '@/app/components/carList';
+import CarForm from '@/app/components/carForm';
+import styles from './styles/mainPage.module.css';
 
 interface Car {
   _id: string;
-  model: string;
+  model_name: string;
   plate_number: string;
   color: string;
 }
@@ -14,12 +16,17 @@ export default function Home() {
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [newCar, setNewCar] = useState<{ model: string; plate_number: string; color: string }>({
-    model: '',
+  const [newCar, setNewCar] = useState<{ model_name: string; plate_number: string; color: string }>({
+    model_name: '',
     plate_number: '',
     color: ''
   });
   const [editCar, setEditCar] = useState<Car | null>(null);
+  const [showForm, setShowForm] = useState(false);
+
+  const handleButtonClick = () => {
+    setShowForm(true); // מציג את קומפוננטת CarForm
+  };
 
   useEffect(() => {
     const loadCars = async () => {
@@ -27,7 +34,7 @@ export default function Home() {
         const carData = await fetchCars();
         setCars(carData);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An unknown error occurred');
+        setError(err instanceof Error ? err.message : 'שגיאה לא ידועה');
       } finally {
         setLoading(false);
       }
@@ -52,9 +59,9 @@ export default function Home() {
         const response = await addCar(newCar);
         setCars((prevCars) => [...prevCars, response]);
       }
-      setNewCar({ model: '', plate_number: '', color: '' });
+      setNewCar({ model_name: '', plate_number: '', color: '' });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
+      setError(err instanceof Error ? err.message : 'שגיאה לא ידועה');
     }
   };
 
@@ -63,74 +70,44 @@ export default function Home() {
       await deleteCar(id);
       setCars((prevCars) => prevCars.filter(car => car._id !== id));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
+      setError(err instanceof Error ? err.message : 'שגיאה לא ידועה');
     }
   };
 
   const handleEdit = (car: Car) => {
     setEditCar(car);
-    setNewCar({ model: car.model, plate_number: car.plate_number, color: car.color });
+    setNewCar({ model_name: car.model_name, plate_number: car.plate_number, color: car.color });
+    setShowForm(true); // להציג את הטופס עם פרטי הרכב לעריכה
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return <div className="alert alert-info">טוען...</div>;
+  if (error) return <div className="alert alert-danger">שגיאה: {error}</div>;
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Cars</h1>
-      <form  className={styles.form} onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="model"
-          value={newCar.model}
-          onChange={handleInputChange}
-          placeholder="Model"
-          className={styles.input}
-          required
-        />
-        <input
-          type="text"
-          name="plate_number"
-          value={newCar.plate_number}
-          onChange={handleInputChange}
-          placeholder="Plate Number"
-          className={styles.input}
-          required
-        />
-        <input
-          type="text"
-          name="color"
-          value={newCar.color}
-          onChange={handleInputChange}
-          placeholder="Color"
-          className={styles.input}
-          required
-        />
-        <button type="submit" className={styles.button}>{editCar ? 'Edit Car' : 'Add Car'}</button>
-      </form>
+    <div className={`container ${styles.container}`}>
+      <h1 className="my-4">רכבים</h1>
+      <button onClick={handleButtonClick} className="btn btn-primary mb-4">
+        הוסף רכב חדש
+      </button>
+      
+      {/* אם יש רכב לעריכה, נציג את טופס העריכה */}
+      {showForm && (
+        <div className="card p-4 mb-4">
+          <h2>{editCar ? 'ערוך רכב' : 'הוספת רכב חדש'}</h2>
+          <CarForm
+            car={newCar}
+            onChange={handleInputChange}
+            onSubmit={handleSubmit}
+            isEditing={!!editCar}
+          />
+        </div>
+      )}
 
-      <div className={styles.carList}>
-      <div className={styles.header}>
-        <span>Model</span>
-        <span>Plate</span>
-        <span>Color</span>
-        <span>Edit</span>
-        <span>Delete</span>
-    </div>
-        {cars.length > 0 ? (
-          cars.map((car) => (
-            <div key={car._id} className={styles.carItem}>
-                <span>{car.model}</span>
-                <span>{car.plate_number}</span>
-                <span>{car.color}</span>              
-                <button className={styles.carItemButton} onClick={() => handleEdit(car)}>Edit</button>
-              <button className={styles.carItemButton}  onClick={() => handleDelete(car._id)} >Delete</button>
-            </div>
-          ))
-        ) : (
-          <p>No cars available.</p>
-        )}
-      </div>
+      <CarList
+        cars={cars}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
     </div>
   );
 }

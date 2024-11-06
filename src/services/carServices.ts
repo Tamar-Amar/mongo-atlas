@@ -13,12 +13,12 @@ export const fetchCars = async () => {
   return response.data;
 };
 
-export const addCar = async (car: { model: string; plate_number: string; color: string }) => {
+export const addCar = async (car: { model_name: string; plate_number: string; color: string }) => {
   const response = await apiClient.post('/', car);
   return response.data;
 };
 
-export const updateCar = async (id: string, car: { model: string; plate_number: string; color: string }) => {
+export const updateCar = async (id: string, car: { model_name: string; plate_number: string; color: string }) => {
   await apiClient.patch(`/?id=${id}`, car);
 };
 
