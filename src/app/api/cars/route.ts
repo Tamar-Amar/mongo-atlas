@@ -72,28 +72,6 @@ export async function GET(req: Request) {
 //             return NextResponse.json({ message: "No car found with this ID or no changes made" }, { status: 404 });
 //         }
 
-<<<<<<< HEAD
-    try {
-        const db = client.db("db01");
-        const result = await db.collection("cars").updateOne(
-            { _id: new ObjectId(id) },
-            { $set: updatedData }
-        );
-
-        if (result.modifiedCount === 0) {
-            alert("No car found with this ID or no changes made");
-            return NextResponse.json({ message: "No car found with this ID or no changes made" }, { status: 404 });
-        }
-
-        return NextResponse.json({ message: "Car updated successfully" });
-    } catch (error) {
-        alert("Error updating car");
-        return NextResponse.json({ message: "Error updating car", error }, { status: 500 });
-    } finally {
-        client.close();
-    }
-}
-=======
 //         return NextResponse.json({ message: "Car updated successfully" });
 //     } catch (error) {
 //         return NextResponse.json({ message: "Error updating car", error }, { status: 500 });
@@ -101,4 +79,3 @@ export async function GET(req: Request) {
 //         client.close();
 //     }
 // }
->>>>>>> ab46566 (david)
