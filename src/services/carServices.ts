@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-    baseURL: "/api/cars", // Use the base URL for Next.js API routes
+    baseURL: "/api/cars",
     headers: {
       "Content-Type": "application/json",
     },

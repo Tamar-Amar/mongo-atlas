@@ -4,12 +4,10 @@ import {ObjectId } from 'mongodb';
 
 
 export async function GET(req: Request) {
-
     const client = await connectDatabase();
     const cars = await getAllDocuments(client, 'cars');
-
     client.close();
-
+    
     return NextResponse.json(cars);
 
 }
@@ -75,11 +73,13 @@ export async function PATCH(req: Request) {
         );
 
         if (result.modifiedCount === 0) {
+            alert("No car found with this ID or no changes made");
             return NextResponse.json({ message: "No car found with this ID or no changes made" }, { status: 404 });
         }
 
         return NextResponse.json({ message: "Car updated successfully" });
     } catch (error) {
+        alert("Error updating car");
         return NextResponse.json({ message: "Error updating car", error }, { status: 500 });
     } finally {
         client.close();
