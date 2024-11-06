@@ -1,70 +1,78 @@
 import { NextResponse } from "next/server";
 import { getAllDocuments, connectDatabase, insertDocument } from '@/services/mongo'
-import {ObjectId } from 'mongodb';
+// import {ObjectId } from 'mongodb';
 
 
 export async function GET(req: Request) {
     const client = await connectDatabase();
     const cars = await getAllDocuments(client, 'cars');
     client.close();
-    
     return NextResponse.json(cars);
-
 }
 
-export async function POST(req: Request) {
-    const client = await connectDatabase();
-    const newCar = await req.json();
+// export async function POST(req: Request) {
+//     const client = await connectDatabase();
+//     const newCar = await req.json();
+//     try {
+//         const result = await insertDocument(client, 'cars', newCar);
+//         client.close();
+//         return NextResponse.json(result, { status: 201 });
+//     } catch (error) {
+//         client.close();
+//         return NextResponse.json({ error: 'Failed to add car' }, { status: 500 });
+//     }
+// }
 
+// export async function DELETE(request: Request) {
+//     const client = await connectDatabase();
+//     const { searchParams } = new URL(request.url);
+//     const id = searchParams.get("id"); // Expecting the ID as a query parameter
 
-    try {
-        const result = await insertDocument(client, 'cars', newCar);
-        client.close();
-        return NextResponse.json(result, { status: 201 });
-    } catch (error) {
-        client.close();
-        return NextResponse.json({ error: 'Failed to add car' }, { status: 500 });
-    }
-}
+//     if (!id) {
+//         return NextResponse.json({ message: "ID parameter is required" });
+//     }
 
-export async function DELETE(request: Request) {
-    const client = await connectDatabase();
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get("id"); // Expecting the ID as a query parameter
+//     try {
+//         const db = client.db("db01");
+//         const result = await db
+//             .collection("cars")
+//             .deleteOne({ _id: new ObjectId(id) });
 
-    if (!id) {
-        return NextResponse.json({ message: "ID parameter is required" });
-    }
+//         if (result.deletedCount === 0) {
+//             return NextResponse.json({ message: "No car found with this ID" });
+//         }
 
-    try {
-        const db = client.db("db01");
-        const result = await db
-            .collection("cars")
-            .deleteOne({ _id: new ObjectId(id) });
+//         return NextResponse.json({ message: "car deleted successfully" });
+//     } catch (error) {
+//         return NextResponse.json({ message: "Error deleting car", error });
+//     } finally {
+//         client.close();
+//     }
+// }
 
-        if (result.deletedCount === 0) {
-            return NextResponse.json({ message: "No car found with this ID" });
-        }
+// export async function PATCH(req: Request) {
+//     const client = await connectDatabase();
+//     const { searchParams } = new URL(req.url);
+//     const id = searchParams.get("id");
 
-        return NextResponse.json({ message: "car deleted successfully" });
-    } catch (error) {
-        return NextResponse.json({ message: "Error deleting car", error });
-    } finally {
-        client.close();
-    }
-}
+//     if (!id) {
+//         return NextResponse.json({ message: "ID parameter is required" }, { status: 400 });
+//     }
 
-export async function PATCH(req: Request) {
-    const client = await connectDatabase();
-    const { searchParams } = new URL(req.url);
-    const id = searchParams.get("id");
+//     const updatedData = await req.json();
 
-    if (!id) {
-        return NextResponse.json({ message: "ID parameter is required" }, { status: 400 });
-    }
+//     try {
+//         const db = client.db("db01");
+//         const result = await db.collection("cars").updateOne(
+//             { _id: new ObjectId(id) },
+//             { $set: updatedData }
+//         );
 
-    const updatedData = await req.json();
+//         if (result.modifiedCount === 0) {
+//             return NextResponse.json({ message: "No car found with this ID or no changes made" }, { status: 404 });
+//         }
 
+<<<<<<< HEAD
     try {
         const db = client.db("db01");
         const result = await db.collection("cars").updateOne(
@@ -85,3 +93,12 @@ export async function PATCH(req: Request) {
         client.close();
     }
 }
+=======
+//         return NextResponse.json({ message: "Car updated successfully" });
+//     } catch (error) {
+//         return NextResponse.json({ message: "Error updating car", error }, { status: 500 });
+//     } finally {
+//         client.close();
+//     }
+// }
+>>>>>>> ab46566 (david)
