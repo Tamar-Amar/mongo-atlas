@@ -29,6 +29,7 @@ export default function Home() {
   };
 
   useEffect(() => {
+    alert("Running ");
     const loadCars = async () => {
       try {
         const carData = await fetchCars();
