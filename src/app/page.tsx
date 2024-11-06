@@ -1,9 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import { fetchCars, addCar, updateCar, deleteCar } from '@/services/carServices';
+import { fetchCars, addCar, updateCar, deleteCar, getAllCars } from '@/services/carServices';
 import CarList from '@/app/components/carList';
 import CarForm from '@/app/components/carForm';
 import styles from './styles/mainPage.module.css';
+
 
 interface Car {
   _id: string;
@@ -31,7 +32,8 @@ export default function Home() {
   useEffect(() => {
     const loadCars = async () => {
       try {
-        const carData = await fetchCars();
+        const carData = await getAllCars();
+        console.log(carData);
         setCars(carData);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'שגיאה לא ידועה');
@@ -84,30 +86,31 @@ export default function Home() {
   if (error) return <div className="alert alert-danger">שגיאה: {error}</div>;
 
   return (
-    <div className={`container ${styles.container}`}>
-      <h1 className="my-4">רכבים</h1>
-      <button onClick={handleButtonClick} className="btn btn-primary mb-4">
-        הוסף רכב חדש
-      </button>
-      
-      {/* אם יש רכב לעריכה, נציג את טופס העריכה */}
-      {showForm && (
-        <div className="card p-4 mb-4">
-          <h2>{editCar ? 'ערוך רכב' : 'הוספת רכב חדש'}</h2>
-          <CarForm
-            car={newCar}
-            onChange={handleInputChange}
-            onSubmit={handleSubmit}
-            isEditing={!!editCar}
-          />
-        </div>
-      )}
+    <p>aaa</p>
+    // <div className={`container ${styles.container}`}>
+    //   <h1 className="my-4">רכבים</h1>
+    //   <button onClick={handleButtonClick} className="btn btn-primary mb-4">
+    //     הוסף רכב חדש
+    //   </button>
 
-      <CarList
-        cars={cars}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
-    </div>
+    //   {/* אם יש רכב לעריכה, נציג את טופס העריכה */}
+    //   {showForm && (
+    //     <div className="card p-4 mb-4">
+    //       <h2>{editCar ? 'ערוך רכב' : 'הוספת רכב חדש'}</h2>
+    //       <CarForm
+    //         car={newCar}
+    //         onChange={handleInputChange}
+    //         onSubmit={handleSubmit}
+    //         isEditing={!!editCar}
+    //       />
+    //     </div>
+    //   )}
+
+    //   <CarList
+    //     cars={cars}
+    //     onEdit={handleEdit}
+    //     onDelete={handleDelete}
+    //   />
+    // </div>
   );
 }
