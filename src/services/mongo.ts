@@ -1,5 +1,3 @@
-
-import exp from 'constants';
 import { MongoClient, ObjectId } from 'mongodb';
 
 export async function connectDatabase() {

@@ -26,15 +26,14 @@ export default function Home() {
   const [showForm, setShowForm] = useState(false);
 
   const handleButtonClick = () => {
-    setShowForm(true); // מציג את קומפוננטת CarForm
+    setShowForm(true);
   };
 
   useEffect(() => {
-    alert("Running ");
     const loadCars = async () => {
       try {
         const carData = await getAllCars();
-        console.log(carData);
+        console.log("page: ",carData);
         setCars(carData);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'שגיאה לא ידועה');
@@ -87,31 +86,30 @@ export default function Home() {
   if (error) return <div className="alert alert-danger">שגיאה: {error}</div>;
 
   return (
-    <p>aaa</p>
-    // <div className={`container ${styles.container}`}>
-    //   <h1 className="my-4">רכבים</h1>
-    //   <button onClick={handleButtonClick} className="btn btn-primary mb-4">
-    //     הוסף רכב חדש
-    //   </button>
+    <div className={`container ${styles.container}`}>
+      <h1 className="my-4">רכבים</h1>
+      <button onClick={handleButtonClick} className="btn btn-primary mb-4">
+        הוסף רכב חדש
+      </button>
 
-    //   {/* אם יש רכב לעריכה, נציג את טופס העריכה */}
-    //   {showForm && (
-    //     <div className="card p-4 mb-4">
-    //       <h2>{editCar ? 'ערוך רכב' : 'הוספת רכב חדש'}</h2>
-    //       <CarForm
-    //         car={newCar}
-    //         onChange={handleInputChange}
-    //         onSubmit={handleSubmit}
-    //         isEditing={!!editCar}
-    //       />
-    //     </div>
-    //   )}
+      {/* אם יש רכב לעריכה, נציג את טופס העריכה */}
+      {showForm && (
+        <div className="card p-4 mb-4">
+          <h2>{editCar ? 'ערוך רכב' : 'הוספת רכב חדש'}</h2>
+          <CarForm
+            car={newCar}
+            onChange={handleInputChange}
+            onSubmit={handleSubmit}
+            isEditing={!!editCar}
+          />
+        </div>
+      )}
 
-    //   <CarList
-    //     cars={cars}
-    //     onEdit={handleEdit}
-    //     onDelete={handleDelete}
-    //   />
-    // </div>
+      <CarList
+        cars={cars}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
+    </div>
   );
 }

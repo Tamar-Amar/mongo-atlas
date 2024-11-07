@@ -1,18 +1,18 @@
 import axios from "axios";
-import http from "@/services/http";
+import my_http from "@/services/http";
 
-const apiClient = axios.create({
-    baseURL: "/api",
-    url: "/api",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+// const apiClient = axios.create({
+//     baseURL: "/api",
+//     url: "/api",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   });
 
 
   export async function getAllCars() {
       try {
-          const response = await http.get("/cars");
+          const response = await my_http.get("/cars");
           console.log(response.data);
           return response.data;
       }
@@ -23,20 +23,20 @@ const apiClient = axios.create({
 
 
 export const fetchCars = async () => {
-  const response = await apiClient.get('/');
+  const response = await my_http.get('/cars');
   return response.data;
 };
 
 
 export const addCar = async (car: { model_name: string; plate_number: string; color: string }) => {
-  const response = await apiClient.post('/', car);
+  const response = await my_http.post('/cars', car);
   return response.data;
 };
 
 export const updateCar = async (id: string, car: { model_name: string; plate_number: string; color: string }) => {
-  await apiClient.patch(`/?id=${id}`, car);
+  await my_http.patch(`/?id=${id}`, car);
 };
 
 export const deleteCar = async (id: string) => {
-  await apiClient.delete(`/?id=${id}`);
+  await my_http.delete(`/cars/?id=${id}`);
 };
